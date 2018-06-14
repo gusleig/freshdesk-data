@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+        <meta charset="utf-8">
+
+        <!-- <link href="../static/css/main.css" rel="stylesheet" type="text/css" /> -->
+
+        <!-- SUPPORT FOR IE6-8 OF HTML5 ELEMENTS -->
+        <!--[if lt IE 9]>
+                    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+
+        <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}"> -->
+{% block head %}
+	 <title>{% block title %} Title!{% endblock %}</title>
+{% endblock %}
+</head>
+
+<body>
+
+<div id="{{ chartID|safe }}"  class="chart" style="width:{{ chartwd|safe }}px;"></div>
+
+<script>
+	var chart_id = {{ chartID|safe }}
+	var series = {{ series|safe }}
+	var title = "{{ title|safe }}"
+  var subtitle = "{{ subtitle|safe }}"
+	var xAxis = "{{ xAxis|safe }}"
+	var yAxis = "{{ yAxis|safe }}"
+  var yAxis2 = "{{ yAxis2|safe }}"
+
+  var chart = {{ chart|safe }}
+
+  var now = new Date();
+  now.setHours(now.getHours()) + Math.round(now.getMinutes());
+  now.setMinutes(0);
+  var utc_timestamp_today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+  var utc_timestamp_3moFromNow = Date.UTC(now.getFullYear(), (now.getMonth() + 3), now.getDate(), 0, 0, 0, 0);
+
+</script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+$(function () {
+    $(chart_id).highcharts({
+        chart: {
+		    plotBackgroundColor: null,
+			plotBorderWidth: null,
+			plotShadow: false,
+			type: 'pie'
+            
+        },
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: title
+        },
+        subtitle: {
+            text: subtitle
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: true,
+					format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+					style: {
+						color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+					}
+				}
+			}
+		},
+        
+        series: series,
+        navigation: {
+        buttonOptions: {
+            enabled: true
+        }
+    }
+    });
+});
+});
+</script>
+
+</body>
+</html>
